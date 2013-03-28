@@ -1,6 +1,8 @@
 <?php
 class Initialization extends CI_Controller
 {
+protected $views = array();
+
 public function index()
 {
 $this->initialize();
@@ -9,10 +11,42 @@ $this->initialize();
 public function initialize()
 {
 $this->load->dbforge();
-$this->load->helper('url');
 
-//create database
+//create tables
+//sesions
 $columns = array(
+'session_id'=> array(
+'type' => 'VARCHAR',
+'constraint' => '40'
+),
+'ip_address' => array(
+'type' => 'varchar',
+'constraint' => '45'
+),
+'user_agent' => array(
+'type' => 'varchar',
+'constraint' => '120'
+),
+'last_activity' => array(
+'type' => 'int',
+'constraint' => '10'
+),
+'user_data' => array(
+'type' => 'text'
+)
+);
+
+$this->dbforge->add_field($columns);
+$this->dbforge->add_key('session_id',true);
+//$this->dbforge->add_key('last_activity');
+$this->dbforge->create_table("sessions", true);
+
+//users
+$columns = array(
+'user_id' => array(
+'type' => 'int',
+'constraint' => '32'
+),
 'firstname'=> array(
 'type' => 'VARCHAR',
 'constraint' => '32'
@@ -33,6 +67,7 @@ $columns = array(
 );
 
 $this->dbforge->add_field($columns);
+$this->dbforge->add_key('user_id',true);
 $this->dbforge->create_table("users",true);
 
 ///////////////////only for testing/////////////////////
@@ -49,21 +84,17 @@ $this->db->insert("users", $data);
 
 
 
-//$views = array();
-//$profile = array();
-//$profile['users'] = array();
-//$views['tab1'] = $this->load->view('pages/profile',$profile);
-//$views['tab2'] = $this->load->view('pages/welcome_message');
-$this->load->view('pages/homepage');//,$views);
+$views[0]=$this->load->view('header');
+$views[1]=$this->load->view('pages/homepage');
+$views[2]=$this->load->view('login');
+$views[3]=$this->load->view('footer');
 
 }
 
-//function switchto($file='welcome_message.php')//, $controller=false)
-//{
-//$this->load->view('pages/' . $file);
-//if ($controller)
-//$this->load->controller($file);
-//}
+public function changeView($nr = 0, $view='header')
+{
+$views[$nr]=$this->load->view($view);
+}
 
 }
 ?>
