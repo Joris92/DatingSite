@@ -1,0 +1,5 @@
+php_flag display_errors on
+
+RewriteEngine on
+RewriteCond $1 !^(index\.php|img|js|css|robots\.txt|javascript|stylesheets)
+RewriteRule ^(.*)$ /~3845346/index.php/$1 [L]
