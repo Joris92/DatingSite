@@ -8,21 +8,16 @@ $this->show();
 
 public function show()
 {
-$this->db->select('*');
-$this->db->from("users");
-$query = $this->db->get();
-$result = $query->result();
-/*foreach($query->result() as $row)
-{
-echo $row->name;
-}*/
+$this->load->model('User');
 $output = array();
-$output["users"] = $result;
+$output["users"] = $this->User->select_users('6','0');//1e getal LIMIT, 2e getal OFFSET
 $this->load->view('pages/profile',$output);
-//echo "HALLO!!!";
 }
 
-
+public function changeView($nr = 'head', $view='header')
+{
+$views[$nr]=$this->load->view($view);
+}
 
 }
 ?>

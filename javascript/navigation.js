@@ -1,4 +1,5 @@
 $().ready(load);
+$().change(load);
 
 function load()
 {
