@@ -45,7 +45,7 @@ $views['reg']=$this->load->view('register');
 else
 {
 $this->User->insert_user();
-echo 'succeeded! click <a href="' . base_url('site') . '">here</a> if the does not refresh automatically.';
+echo 'succeeded! click <a href="' . base_url('site') . '">here</a> if the page does not refresh automatically.';
 //iets met timer?
 redirect(base_url('site'));
 }
