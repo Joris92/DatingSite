@@ -1,4 +1,4 @@
-<?php
+<?php 
 class User extends CI_Model {
 
     function __construct()
@@ -6,10 +6,19 @@ class User extends CI_Model {
         parent::__construct();
     }
     
+    function select_userByID($id)
+    {
+    $this->db->select('*');
+    $this->db->from('users');
+    $this->db->where('user_id',$id);
+    $query = $this->db->get();
+    return $query->row();
+    }
+    
     function select_users($limEnd, $limStart)
     {
     $this->db->select('*');
-    $this->db->from("users");
+    $this->db->from('users');
     $this->db->limit($limEnd,$limStart);
     $query = $this->db->get();
     return $query->result();
@@ -24,47 +33,91 @@ class User extends CI_Model {
     if ($this->db->count_all_results() == 1)
     {
     $query = $this->db->get('users');
-    $this->session->set_userdata('user_id', $query->row()->user_id);
-    echo 'logged in as ' . $query->row()->nickname;   
+    $user = $query->row();
+    return $user;   
     }
-    else 
-    {
-    echo "login failed. <a href='" . base_url() . "'>try again?</a>";  
-    }
-    }
+    else
+    return 'error';
+  }
     
     function insert_user()
     {
-    $newID = '1';
-    //$this->db->select_max('user_id');
-    //$query = $this->db->get('users');
-    //$newID = $query->row();
+    $newID = 0;
+    $this->db->select_max('user_id');
+    $query = $this->db->get('users');
+    $newID = $query->row()->user_id;
+    $newID = $newID + 1;
     $this->session->set_userdata('user_id',$newID);
     $this->user_id = $newID;
-    $this->nickname = $this->input->post('nickname');
+    
+    $nickname = $this->input->post('nickname');
+    $this->db->where('nickname',$nickname);
+    	$this->db->from('users');
+    	if ($this->db->count_all_results() == '0')
+    	$this->nickname = $nickname;
+    	else
+    	return false;
+    
+    
     $this->firstname = $this->input->post('firstname');
     $this->surname = $this->input->post('surname');
     $this->password = $this->input->post('password');
+    
     
     $this->db->insert('users', $this);
-    }
-     function update_entry()
-    {
-    $this->user_id = $this->session->userdata('user_id');
-    $this->nickname = $this->input->post('nickname');
-    $this->firstname = $this->input->post('firstname');
-    $this->surname = $this->input->post('surname');
-    $this->password = $this->input->post('password');
-
-    $this->db->update('users', $this, array('id' => $_POST['id']));
+    return true;
     }
     
+     function update_user()
+    {
+    	$currentID = $this->session->userdata('user_id');
+    	if ($currentID == -1)
+    	return false;
+    	
+    $this->user_id = $currentID;
+    $user = $this->select_userByID($currentID);
+    
+    $nickname = $this->input->post('nickname');
+    $firstname = $this->input->post('firstname');
+    $surname = $this->input->post('surname');
+    $password = $this->input->post('password');
+    
+    if ($nickname != '')
+    {
+    	$this->db->where('nickname',$nickname);
+    	$this->db->from('users');
+    	if ($this->db->count_all_results() == '0' || $nickname == $user->nickname)
+    	$this->nickname = $nickname;
+    	else
+    	return false;
+    }
+    else 
+    $this->nickname = $user->nickname;
+        if ($firstname != '')
+    $this->firstname = $firstname;
+    else
+    $this->firstname = $user->firstname;
+        if ($surname != '')
+    $this->surname = $surname;
+        else
+    $this->surname = $user->surname;
+        if ($password != '')
+    $this->password = $password;
+        else
+    $this->password = $user->password;
+    
+    //$this->db->insert('users');
+    $this->db->update('users', $this,'user_id = ' . $currentID);
+    return true;
+  }
    
    
    
    
   /* private function() //////ONLY ADMIN//////////
    {
+   $this->db->empty_table('users');
+   
    $this->load->dbforge();
 //sesions
 $columns = array(

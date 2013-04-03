@@ -8,7 +8,7 @@ $this->show();
 
 public function show()
 {
-$this->load->model('User');
+//$this->load->model('User');
 $output = array();
 $output["users"] = $this->User->select_users('6','0');//1e getal LIMIT, 2e getal OFFSET
 $this->load->view('pages/profile',$output);

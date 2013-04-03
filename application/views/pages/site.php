@@ -12,11 +12,13 @@
 </head>
 <body>
 <div id="tabs">
-<ul>
-<li><a href="welcome">tab1</a></li>
-<li><a href="profile">tab2</a></li>
+<ul> <!-- welcome message if page isnt implemented -->
+<li><a href="home">Home</a></li>
+<li><a href="profile">Search</a></li>
+<li><a href="matches">Matches</a></li>
+<li><a href="edit">My profile</a></li>
+<li><a href="test">Test</a></li>
 </ul>
 </div>
-
 </body>
 </html>

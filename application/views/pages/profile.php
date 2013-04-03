@@ -10,4 +10,4 @@ foreach($users as $user)
 <td><?php echo ($user->surname); ?></td>
 </tr>
 <?php } ?>
-</table>
+</table> 

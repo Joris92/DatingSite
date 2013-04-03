@@ -7,7 +7,7 @@ public function index()
 {
 $this->views = array('head' => 'header',
 'log' => 'login',
-'main' => 'pages/homepage',
+'main' => 'pages/site',
 'foot' => 'footer',
 'status' => 'status'//here something that shows who's logged in (or that nobody's logged in)
 );
@@ -16,6 +16,9 @@ $this->show();
 
 public function show()
 {
+	//pass default values for all possibly required variables  
+$data['fail'] = false;
+	
 foreach($this->views as $key => $view)
 {
 if($key == 'log' && $this->session->userdata('user_id') > -1)
@@ -24,7 +27,7 @@ $this->load->view('status');
 }
 else
 {
-$this->load->view($view);
+$this->load->view($view,$data);
 }
 }
 
