@@ -1,0 +1,36 @@
+#container
+{
+	
+}
+
+.myform
+{
+	position:relative;
+	width:300px;
+	height:300px;
+}
+.label
+{
+	position:absolute;
+	top:0;
+	left:0;
+	width:60%;
+}
+.input
+{
+	position:absolute;
+	top:0;
+	right:0;
+	width:40%;
+}
+.line
+{
+height:20px;
+}
+
+.extra
+{
+	position:fixed;
+	bottom:25px;
+	right:25px;
+}

@@ -1,5 +1,7 @@
 <?php 
 class User extends CI_Model {
+	
+protected $unfinishedRegistrations = 0;
 
     function __construct()
     {
@@ -13,6 +15,14 @@ class User extends CI_Model {
     $this->db->where('user_id',$id);
     $query = $this->db->get();
     return $query->row();
+    }
+    
+    function select_all_users()
+    {
+    $this->db->select('*');
+    $this->db->from('users');
+    $query = $this->db->get();
+    return $query;
     }
     
     function select_users($limEnd, $limStart)
@@ -29,27 +39,31 @@ class User extends CI_Model {
     {
     $this->db->where('nickname',$this->input->post('nickname'));
     $this->db->where('password',$this->input->post('password'));
-    $this->db->from('users');
-    if ($this->db->count_all_results() == 1)
-    {
     $query = $this->db->get('users');
-    $user = $query->row();
-    return $user;   
+    
+    if ($query->num_rows() == 1)
+    {
+    return $query->row();
     }
     else
     return 'error';
   }
     
-    function insert_user()
+    function assignID()
     {
-    $newID = 0;
+    	    $newID = 0;
     $this->db->select_max('user_id');
     $query = $this->db->get('users');
     $newID = $query->row()->user_id;
-    $newID = $newID + 1;
-    $this->session->set_userdata('user_id',$newID);
-    $this->user_id = $newID;
+    $this->unfinishedRegistrations = $this->unfinishedRegistrations+1;
+    $newID = $newID + $this->unfinishedRegistrations;
+    return $newID;
+    }
     
+    function insert_user($newID)
+    {
+			$this->user_id = $newID;
+			$this->unfinishedRegistrations = $this->unfinishedRegistrations - 1;
     $nickname = $this->input->post('nickname');
     $this->db->where('nickname',$nickname);
     	$this->db->from('users');
@@ -65,6 +79,7 @@ class User extends CI_Model {
     
     
     $this->db->insert('users', $this);
+    $this->session->set_userdata('user_id',$newID);
     return true;
     }
     

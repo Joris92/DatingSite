@@ -52,7 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database','session');//'db/profiles.sqlite');
+$autoload['libraries'] = array('database','session','upload','pagination','form_validation');//'db/profiles.sqlite');
 
 
 /*

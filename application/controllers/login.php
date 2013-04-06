@@ -17,12 +17,13 @@ public function loginForm()
 {
 		$data['fail'] = false;
 //$this->load->model('User');
-$this->load->library('form_validation');
+//$this->load->library('form_validation');
 
 $this->form_validation->set_rules('nickname', 'nickname', 'required');
 $this->form_validation->set_rules('password', 'password', 'required');
 if ($this->form_validation->run() == FALSE)
 {
+	$data['fail'] = true;
 $this->load->view('login', $data);
 // $this->load->view('pages/homepage');
 }
