@@ -1,29 +1,76 @@
 <?php
-class Test extends CI_Controller
-{
-public function index()
-{
-$this->show();
-}
+class Test extends CI_Controller {
 
-public function show()
-{
-	$this->load->view('pages/test');
-}
+	function index()
+	{
+		$this->load->helper(array('form', 'url'));
 
-public function showResult()
-{
-	$this->load->view('pages/testResult');
-}
+		$this->load->library('form_validation');
 
-public function testForm()
-{
-	//run validation
-$this->siteVar['test'] = base_url('test/showResult');
-redirect(base_url('site'));
-	//output view + result
-}
+		$numbers = array(
+				'one', 
+				'two', 
+				'three', 
+				'four', 
+				'five', 
+				'six', 
+				'seven', 
+				'eight', 
+				'nine', 
+				'ten', 
+				'eleven', 
+				'twelve', 
+				'thirteen', 
+				'fourteen', 
+				'fifteen', 
+				'sixteen', 
+				'seventeen', 
+				'eighteen', 
+				'ninteen'
+				);
+		
+		for($i = 1; $i <= 19; $i++)//19
+		{
+			$this->form_validation->set_rules('q' . $i, 'question ' . $numbers[$i - 1], 'required');
+		}
 
+		if ($this->form_validation->run() == FALSE)
+		{
+			$this->load->view('testform');
+		}
+		else
+		{
+			$EIvalue = 50;
+			$NSvalue = 50;
+			$TFvalue = 50;
+			$JPvalue = 50;
+			
+			for($i = 1; $i <= 19; $i++)
+			{
+				$qstring = 'q' . $i;
+				$answer = $this->input->post($qstring);
+				if ($i < 6)       { $EIvalue = $EIvalue + 10   * $answer; }
+				else if ($i < 10) { $NSvalue = $NSvalue + 12.5 * $answer; }
+				else if ($i < 14) { $TFvalue = $TFvalue + 12.5 * $answer; }
+				else              { $JPvalue = $JPvalue + 8.33 * $answer; }
+			}
 
+			$values['values'] = array(
+				'EI' => $EIvalue,
+				'NS' => $NSvalue,
+				'TF' => $TFvalue,
+				'JP' => $JPvalue,
+				);
+
+		      /*if ($this->uploadtest->results())
+			{ */
+				$this->load->view('testsuccess', $values); /*
+			}
+			else
+			{
+				$this->load->view('testfail');
+			} */
+		}
+	}
 }
 ?>

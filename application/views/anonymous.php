@@ -1,1 +1,1 @@
-log in (linksboven) of registreer nu hieronder!
+log in (upperleft) or register now (beneath)!

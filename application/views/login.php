@@ -16,7 +16,7 @@ echo form_submit('login_request','Log in!');
 
 //initialization/ 
 ?></form><br>
-Don't have an account yet? <a href="<? echo base_url('register/registerForm'); ?>">register</a>.
+Don't have an account yet? <a href=<? echo base_url('register'); ?>>register</a>.
 
 <?
 if ($fail)

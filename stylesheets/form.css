@@ -1,13 +1,16 @@
-#container
+
+
+#subpage
 {
-	
+	position:relative;
 }
 
 .myform
 {
 	position:relative;
-	width:300px;
-	height:300px;
+	height:400px; /*hardcoded to avoid overlapping */ 
+	width:400px;
+	
 }
 .label
 {
@@ -15,6 +18,8 @@
 	top:0;
 	left:0;
 	width:60%;
+		height:auto;
+			
 }
 .input
 {
@@ -22,10 +27,28 @@
 	top:0;
 	right:0;
 	width:40%;
+	height:auto;
 }
 .line
 {
 height:20px;
+}
+
+.area
+{
+	
+}
+#test
+{
+	position:relative;
+}
+.areas
+{
+	position:relative;
+}
+.buttons
+{
+	position:relative;
 }
 
 .extra

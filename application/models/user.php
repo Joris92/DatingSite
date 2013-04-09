@@ -1,6 +1,9 @@
 <?php 
 class User extends CI_Model {
-	
+
+//counts the number of assigned id's, which aren't inserted in the database.
+//This way the user can upload a photo, with the assigned id, before the user
+//is added to the database 
 protected $unfinishedRegistrations = 0;
 
     function __construct()
@@ -76,8 +79,26 @@ protected $unfinishedRegistrations = 0;
     $this->firstname = $this->input->post('firstname');
     $this->surname = $this->input->post('surname');
     $this->password = $this->input->post('password');
+    $this->mail = $this->input->post('mail');
+    $birthday = '';
+    $day = $this->input->post('birthday');
+    if ($day <= 9)
+    $birthday = '0';
+    $birthday = $birthday . $day;
+    $month = $this->input->post('birthmonth');
+    if ($month <= 9)
+    $birthday = $birthday . '0';
+    $birthday = $birthday . $month . $this->input->post('birthyear');
     
-    
+    $this->birthday = $birthday;
+    $this->agemin = $this->input->post('min_age');
+    $this->agemax = $this->input->post('max_age');
+    $this->sex = $this->input->post('sex');
+    $this->description = $this->input->post('description');
+    $this->sexpreference = $this->input->post('sex_pref');
+    $this->brandpreference = $this->input->post('brand_pref');
+    $this->personalitypreference = $this->input->post('personality_pref');                    
+    $this->personality = $this->input->post('personality');  
     $this->db->insert('users', $this);
     $this->session->set_userdata('user_id',$newID);
     return true;

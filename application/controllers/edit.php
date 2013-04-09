@@ -1,37 +1,61 @@
 <?php
 class Edit extends CI_Controller
 {
+		protected $thisyear = 2013;
 protected $error = array();
 protected $fileError = false;
 
 public function index()
 {
+		
 	if($this->session->userdata('user_id') > -1)
 $this->editForm();
 else  
 {
 	$this->load->view('anonymous');
-	$this->error['error'] = '';
-	$this->load->view('register',$this->error);
+		$this->error['error'] = '';
+	$this->error['sendto'] = 'register/registerForm';
+	$this->error['auto'] = true;
+	$this->error['submit'] = 'register';
+	$this->load->view('profileform',$this->error);
 }
 } 
 
+public function initialize($err='')
+{
+	$this->error['error'] = $err;
+	$this->error['sendto'] = 'edit/editForm';
+	$this->error['auto'] = false;
+	$this->error['submit'] = 'update';
+}
 
 public function editForm()
 {
-	$this->error['error'] = '';
+	$this->initialize();
 	$this->uploadForm();
-
-$this->form_validation->set_rules('nickname', 'nickname', '');
-$this->form_validation->set_rules('password', 'password', 'matches[confirm]');
-$this->form_validation->set_rules('confirm', 'password confirmation', '');
-$this->form_validation->set_rules('firstname', 'first name', '');
-$this->form_validation->set_rules('surname', 'surname', '');
-
+$defaultVal = 'alpha_dash|';
+$this->form_validation->set_rules('nickname', 'nickname', $defaultVal . 'max_length[16]|is_unique[users.nickname]');
+$this->form_validation->set_rules('password', 'password', $defaultVal . 'matches[confirm]|min_length[4]|max_length[16]');
+$this->form_validation->set_rules('confirm', 'password confirmation', $defaultVal . 'min_length[4]|max_length[16]');
+$this->form_validation->set_rules('firstname', 'first name', $defaultVal . 'max_length[32]');
+$this->form_validation->set_rules('surname', 'surname', $defaultVal . 'max_length[32]');
+$this->form_validation->set_rules('mail', 'email address', 'valid_email|is_unique[users.mail]');
+$this->form_validation->set_rules('birthday', 'day of birth', $defaultVal . 'max_length[2]|integer|less_than[32]|greater_than[-1]');
+$this->form_validation->set_rules('birthmonth', 'month of birth', $defaultVal . 'max_length[2]|integer|less_than[13]|greater_than[-1]');
+$this->form_validation->set_rules('birthyear', 'year of birth', $defaultVal . 'max_length[4]|integer|greater_than[' . ($this->thisyear - 999) . ']|less_than[' . ($this->thisyear - 17) . ']');
+$this->form_validation->set_rules('min_age', 'minimum age', $defaultVal . 'max_length[3]|integer|less_than[max_age]|less_than[999]|greater_than[17]');
+$this->form_validation->set_rules('max_age', 'maximum age', $defaultVal . 'max_length[3]|integer|less_than[999]|greater_than[17]');
+$this->form_validation->set_rules('sex', 'sex', $defaultVal);
+$this->form_validation->set_rules('sex_pref', 'preffered sex', $defaultVal);
+$this->form_validation->set_rules('brand_pref', 'favourite brands', $defaultVal);
+$this->form_validation->set_rules('personality', 'personality', $defaultVal);
+$this->form_validation->set_rules('description', 'description', $defaultVal);
+$this->form_validation->set_rules('personality_pref', 'preffered personality', $defaultVal);
 if ($this->form_validation->run() == false || $this->fileError)
 {
 	$this->fileError = false;
-$this->load->view('pages/edit', $this->error);
+	$this->initialize($this->error['error']);
+$this->load->view('profileform', $this->error);
 }
 else
 {

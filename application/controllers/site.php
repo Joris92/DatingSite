@@ -27,6 +27,8 @@ $this->show();
 
 public function show()
 {
+	$this->checkRights();
+	
 foreach($this->views as $key => $view)
 {
 if($key == 'log' && $this->session->userdata('user_id') > -1)
@@ -42,20 +44,17 @@ $this->load->view($view,$this->siteVar);
 
 }
 
-/*public function changeView($key = 'head', $view ='header')
+public function checkRights()
 {
-$this->load->view($view);
-//javascript doesn't work correctly
-/*$this->views = array('head' => 'header',
-'log' => 'login',
-'main' => 'pages/homepage',
-'foot' => 'footer'
+	$userID = $this->session->userdata('user_id');
+if ($userID == '' || $userID == '-1')
+{
+$sessionData = array (
+'user_id' => '-1'
 );
-$this->views[$key] = $view;
-$this->show(); 
-* /
-
-}*/
+$this->session->set_userdata($sessionData);
+}
+}
 
 }
 ?>
